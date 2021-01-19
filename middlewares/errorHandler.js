@@ -13,7 +13,12 @@ const errorHandler = (err, req, res, next) => {
   else if (err.name === "ValidationError") {
     errors = new ErrorResponse(400, {});
     for (let errorField in err.errors) {
-      errors.error[errorField] = err.errors[errorField].message;
+      let error_id = null;
+      if (errorField.includes(".")) {
+        error_id = errorField.slice(errorField.lastIndexOf(".") + 1);
+      }
+      errors.error[error_id ? error_id : errorField] =
+        err.errors[errorField].message;
     }
     // delete file in bucket if validation failed
     if (req.file) ConnectMongoDB.gfs.delete(req.file.id);
@@ -25,7 +30,7 @@ const errorHandler = (err, req, res, next) => {
     for (let error_id in err.keyValue) {
       if (error_id.includes("."))
         error_id = error_id.slice(error_id.lastIndexOf(".") + 1);
-      errors.error[error_id] = `${error_id} is already existed`;
+      errors.error[error_id] = `The ${error_id} is already in use`;
     }
     if (req.file) ConnectMongoDB.gfs.delete(req.file.id);
   }

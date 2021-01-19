@@ -9,7 +9,8 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    required: [true, "role is required"],
+    enum: ["admin", "guest", "staff"],
+    default: "guest",
   },
   data: {
     displayName: {
@@ -18,6 +19,7 @@ const UserSchema = new Schema({
     },
     photoUrl: {
       type: String,
+      default: null,
     },
     email: {
       type: String,
@@ -108,8 +110,8 @@ const UserSchema = new Schema({
     },
     shortcuts: {
       type: [String],
-      enum: ["calendar", "mail", "contacts"],
-      default: ["calendar", "mail", "contacts"],
+      enum: ["calendar", "mail", "contacts", "todo"],
+      default: ["calendar", "mail", "contacts", "todo"],
     },
   },
 });
