@@ -6,12 +6,14 @@ require("dotenv").config();
 require("colors");
 const cors = require("cors");
 const user = require("./routes/user");
+const auth = require("./routes/auth");
 
 ConnectMongoDB.getConnection();
 
 app.use(express.json());
 app.use(cors());
 
+app.use("/api/v1/auth", auth);
 app.use("/api/v1/user", user);
 app.use(errorHandler);
 
